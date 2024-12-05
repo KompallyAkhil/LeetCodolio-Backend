@@ -66,7 +66,6 @@ async function WebScarpe(username) {
     finally {
         await browser.close();
     }
-
 }
 app.get('/scrape/:username', async (req, res) => {
     try {
