@@ -5,7 +5,17 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors())
 async function WebScarpe(username) {
-    const browser = await puppeteer.launch({ headless: false});
+    const browser = await puppeteer.launch({
+        args: [
+            "--disable-setuid-sandbox",
+            "--no-sandbox",
+            "--single-process",
+            "--no-zygote"
+        ],
+        executablePath: process.env.NODE_ENV === "production"
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+    });
     try {
         const page = await browser.newPage();
         page.setDefaultTimeout(15000);
