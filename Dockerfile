@@ -1,22 +1,20 @@
-# Use Puppeteer base image
-FROM ghcr.io/puppeteer/puppeteer:19.7.2
+# Use an official Node.js runtime as a parent image
+FROM node:18
 
-# Set environment variables
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
-
-# Set working directory
-WORKDIR /usr/src/app
+# Set the working directory
+WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm ci
+
+# Install dependencies with --legacy-peer-deps to resolve conflicts
+RUN npm ci --legacy-peer-deps
 
 # Copy the entire project
 COPY . .
 
-# Expose the port
-EXPOSE 9000
+# Expose the application port
+EXPOSE 3000
 
-# Start the server
-CMD ["node", "index.js"]
+# Start the application
+CMD ["npm", "start"]
