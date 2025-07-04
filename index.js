@@ -80,7 +80,8 @@ app.get('/scrape/:username', async (req, res) => {
         res.status(500).send("Cannot find for the given Username");
     }
 })
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
+
 
