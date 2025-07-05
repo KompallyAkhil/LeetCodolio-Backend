@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y \
   libxss1 \
   libxtst6 \
   xdg-utils \
+  libdrm2 \
+  libdrm1 \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
