@@ -5,10 +5,12 @@ const app = express();
 const port = 5000;
 app.use(cors())
 async function WebScarpe(username) {
-    // const browser = await puppeteer.launch({headless:false});
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
+    const browser = await puppeteer.launch({headless:false , args: ['--no-sandbox', '--disable-setuid-sandbox']});
+//     const browser = await puppeteer.launch({
+//   headless: 'new',
+//   args: ['--no-sandbox', '--disable-setuid-sandbox']
+// });
+
     try {
         const page = await browser.newPage();
         page.setDefaultTimeout(15000);
@@ -72,13 +74,16 @@ async function WebScarpe(username) {
 }
 app.get('/scrape/:username', async (req, res) => {
     try {
-        const username = req.params.username;
-        const data = await WebScarpe(username);
-        return res.json(data)
-    }
-    catch (error) {
-        res.status(500).send("Cannot find for the given Username");
-    }
+    const username = req.params.username;
+    const data = await WebScarpe(username);
+    return res.json(data);
+  } catch (error) {
+    console.error("Scraping error:", error.message);
+    res.status(500).json({
+      error: "Scraping failed",
+      message: error.message
+    });
+  }
 })
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${port}`);
