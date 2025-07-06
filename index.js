@@ -6,11 +6,6 @@ const port = 5000;
 app.use(cors())
 async function WebScarpe(username) {
     const browser = await puppeteer.launch({headless:false , args: ['--no-sandbox', '--disable-setuid-sandbox']});
-//     const browser = await puppeteer.launch({
-//   headless: 'new',
-//   args: ['--no-sandbox', '--disable-setuid-sandbox']
-// });
-
     try {
         const page = await browser.newPage();
         page.setDefaultTimeout(15000);

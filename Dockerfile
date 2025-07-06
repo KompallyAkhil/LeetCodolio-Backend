@@ -1,43 +1,43 @@
-# Use an official Node.js image
 FROM node:18-slim
 
-# Install Puppeteer dependencies
+# Install Chromium and dependencies
 RUN apt-get update && apt-get install -y \
-  wget \
-  ca-certificates \
-  fonts-liberation \
-  libappindicator3-1 \
-  libasound2 \
-  libatk-bridge2.0-0 \
-  libatk1.0-0 \
-  libcups2 \
-  libdbus-1-3 \
-  libgdk-pixbuf2.0-0 \
-  libnspr4 \
-  libnss3 \
-  libx11-xcb1 \
-  libxcomposite1 \
-  libxdamage1 \
-  libxrandr2 \
-  libxss1 \
-  libxtst6 \
-  xdg-utils \
-  libdrm2 \
-  --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/*
+    chromium \
+    fonts-liberation \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libx11-xcb1 \
+    xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Create app directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --omit=dev
 
-# Copy the rest of the application
+# Copy source code
 COPY . .
 
 # Expose port
 EXPOSE 5000
 
-# Start the server
+# Run as node user (optional for security)
+RUN useradd -m nodeuser
+USER nodeuser
+
 CMD ["node", "index.js"]
